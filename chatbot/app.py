@@ -3,7 +3,6 @@ from langchain.output_parsers import RetryOutputParser
 
 from dotenv import load_dotenv
 import os
-import httpx  # Ensure httpx is imported
 from mistralai import Mistral
 
 
