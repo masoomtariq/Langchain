@@ -1,6 +1,0 @@
-langchain
-langchain_core
-python-dotenv
-streamlit
-mistralai
-langchain-google-genai
