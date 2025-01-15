@@ -1,6 +1,5 @@
-import google.generativeai as genai
+from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import ChatPromptTemplate
-from langchain.output_parsers import PydanticOutputParser
 import streamlit as st
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -23,14 +22,6 @@ prompt=ChatPromptTemplate.from_messages(
     ]
 )
 
-
-generation_config = {"temperature": 0 }
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-'''model = genai.GenerativeModel(
-  model_name="gemini-1.5-flash-8b",
-  generation_config=generation_config,
-)'''
-
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash-8b",
     api_key=os.getenv("GOOGLE_API_KEY"),
@@ -38,21 +29,15 @@ llm = ChatGoogleGenerativeAI(
     max_tokens=None,
     timeout=None,
 )
-#generation_config=generation_config)
 
 st.subheader("Enter your prompt")
 
 input_text = st.text_input("Enter: ")
 
-parser = PydanticOutputParser(pydantic_object=input_text)
+#initialize the parser
+parser = StrOutputParser()
 
-chain = prompt | llm
-
-out = chain.invoke({"question":input_text})
+chain = prompt | llm | parser
 
 if input_text:
-    st.write(parser.invoke(out))
-    #st.write(chain.run({"question": input_text}))
-
-
-#st.write(parser.invoke({"query": state["query"]}))
+    st.write(chain.invoke({"question":input_text}))

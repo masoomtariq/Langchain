@@ -47,9 +47,3 @@ input_text = st.text_input("Enter your query: ")
 response = answer_user_query(input_text)
 
 st.write(response)
-
-# Removed redundant load_dotenv() call
-
-## Langmith tracking
-#os.environ["LANGCHAIN_TRACING_V2"]="true"
-#os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
