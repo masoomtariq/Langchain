@@ -23,7 +23,7 @@ prompt=ChatPromptTemplate.from_messages(
 )
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash-8b",
+    model="gemini-2.0-flash-exp",
     api_key=os.getenv("GOOGLE_API_KEY"),
     temperature=0,
     max_tokens=None,
