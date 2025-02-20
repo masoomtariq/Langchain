@@ -1,12 +1,12 @@
 import streamlit as st
 from streamlit_chat import message
 import tempfile
-from langchain.document_loaders import PyPDFLoader, TextLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter as splitter # For splitting text into chunks
 from langchain_google_genai.embeddings import GoogleGenerativeAIEmbeddings #For creating text embeddings
-from langchain.vectorstores import FAISS # For storing and searching vectors
+from langchain_community.vectorstores import FAISS # For storing and searching vectors
 from langchain_groq import ChatGroq
-from langchain_google_genai import ChatGoogleGenerativeAI # For using Gemini LLM
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAI # For using Gemini LLM
 from langchain.prompts import ChatPromptTemplate # For creating prompt templates
 from langchain.load import dumps, loads
 from operator import itemgetter # For accessing items in dictionaries
@@ -57,7 +57,7 @@ def vectore_store():
         st.error(f"Error creating vector store: {e}") # Display error
         return None
     
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-lite-preview-02-05", temperature=0, api_key=google_key)
+llm = GoogleGenerativeAI(model="gemini-2.0-flash-lite-preview-02-05", temperature=0, api_key=google_key)
 model = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", api_key=google_key, temperature=0)
 
 # Gets unique documents from a list of lists
@@ -111,15 +111,15 @@ def generate_responce():
     retreival = get_queries | st.session_state.vectors.as_retriever().map() | get_unique
 
     st.session_state.messages.append(HumanMessage(content = st.session_state.entered_prompt))
-    prompt = ChatPromptTemplate(messages = st.session_state.messages)
+    prompt = ChatPromptTemplate.from_messages(st.session_state.messages)
 
     chain = {'context': itemgetter('query') | retreival } | prompt | llm
     response = chain.invoke({'query': st.session_state.entered_prompt})
 
-    st.session_state.messages.append(AIMessage(content=response.content))
+    st.session_state.messages.append(AIMessage(content=response))
 
     st.session_state['past'].append(st.session_state.entered_prompt)
-    st.session_state['generated'].append(response.content)
+    st.session_state['generated'].append(response)
 
 def initialize_state():
     # Define initial states and assign values
