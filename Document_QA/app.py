@@ -184,12 +184,12 @@ def display_chat():
                 is_user=True, key=f"{str(i)}_user")
         message(st.session_state['generated'][i], key=str(i))
 
+initialize_state()
+
 def main():
 
     st.set_page_config(page_title="Q/A", page_icon=":books:")
     st.title("Document Q/A :book:")
-
-    initialize_state()
 
     # Create a form for uploading files
     with st.sidebar:
