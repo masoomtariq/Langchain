@@ -3,4 +3,3 @@ langchain_core
 python-dotenv
 streamlit
 langchain-google-genai
-numpy
